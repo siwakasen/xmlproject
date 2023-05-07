@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package xmlproject;
 
 import org.w3c.dom.*;
@@ -16,13 +13,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
 /**
- *
  * @author riksi
  */
+
+ //Project ini untuk menyimpan history data yang sedikit tanpa menggunakan database
+  //data tersimpan di dalam file berekstensi .xml
+
 public class XMLProject {
     public static void main(String[] args)
     throws ParserConfigurationException, TransformerException {
+       //auto generate path menggunakan nama 
+       //cara kerja generate path ini bukan mencari file .xmlnya,
+       // akan tetapi dgn mencari path dari project ini kemudian menambahkan nama file .xml dibelakangnya
         Path path = Paths.get("history.xml");
+
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -31,18 +35,20 @@ public class XMLProject {
         Element rootElement = doc.createElement("history");
         doc.appendChild(rootElement);
 
-        // kendaraan jenis motor
+        // rewrite nama elemen
         Element kendaraan = doc.createElement("Mobil");
         rootElement.appendChild(kendaraan);
 
+        //menambahkan data id di dalam elemen
         Element id = doc.createElement("id");
         id.setTextContent("MBL-1");
         kendaraan.appendChild(id);
 
-        //kendaraan jenis mobil
+        //rewrite nama elemen kedua
         Element kendaraan2 = doc.createElement("Motor");
         rootElement.appendChild(kendaraan2);
 
+        //menambahkan data id di dalam elemen kedua
         Element id2 = doc.createElement("id");
         id2.setTextContent("MTR-1");
         kendaraan2.appendChild(id2);
@@ -58,12 +64,16 @@ public class XMLProject {
 
         // print XML to system console
         writeXml(doc, System.out);
-        //print history ID Kendaraan
+
+        //mengambil data dari file .xml
         File file = new File(path.toAbsolutePath().toString());
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         try{
+            //parsing dari dalam file.xml kemudian disimpan pada object data
             Document data = db.parse(file);
+
+            //print data id dari history
             System.out.println(getHistoryID(data,"Mobil")); 
             System.out.println(getHistoryID(data,"Motor")); 
         }catch(Exception e){
@@ -72,7 +82,7 @@ public class XMLProject {
 
     }
 
-    // write doc to output stream
+    // menulis ulang data di dalam .xml
     private static void writeXml(Document doc,OutputStream output)
         throws TransformerException {
 
@@ -86,6 +96,7 @@ public class XMLProject {
         transformer.transform(source, result);
 
     }
+    //fungsi mengambil data di dalam object data
     private static String getHistoryID(Document doc, String jenis){
         NodeList historyNodes = doc.getElementsByTagName(jenis);
         for(int i=0; i<historyNodes.getLength(); i++){
@@ -99,3 +110,8 @@ public class XMLProject {
         return "";
     }
 }
+
+
+
+
+//kamu menemukan pesan gabut dari orang gabut
